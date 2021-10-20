@@ -1,0 +1,96 @@
+<!doctype html>
+<meta charset="UTF-8">
+<script src="videoplayer.js"></script>
+
+<html style="min-height: 2000px">
+  <div id="vidplayerdiv"></div>
+  
+  <script>
+    var vidplayer = new VideoPlayer("vidplayerdiv", 320, 240);
+    vidplayer.load("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4");
+    vidplayer.setAutoplay(false);
+  </script>
+  
+  <button type="button" onclick="vidplayer.play()">Play</button>
+  <button type="button" onclick="vidplayer.Pause()">Pause</button>
+  <button type="button" onclick="vidplayer.setMute(true)">Mute</button>
+  <button type="button" onclick="vidplayer.setMute(false)">Unmute</button>
+  <button type="button" onclick="vidplayer.setFullscreen(true)">Fullscreen</button>
+  <br><br>
+
+  <input type="text" id="urlBox" style="width: 300px"> <button type="button" onclick="loadVideo()">Load Video</button>
+  <script>
+    function loadVideo() {
+      let url = document.getElementById("urlBox").value;
+      vidplayer.load(url);
+    }
+  </script>
+
+  <p id="viewabilityText">Current viewability: 100%</p>
+  <script>
+    /*comment out the following function and run vidplayer.getViewability() once by itself
+      to instead display viewability with a precision threshold of 10% of player's size
+      inside of the video player div's hidden element*/
+    window.onscroll = function () {
+      document.getElementById("viewabilityText").innerHTML = "Current viewability: " + vidplayer.getViewability() + "%";
+    }
+    //vidplayer.getViewability();
+  </script>
+
+  <p id="durationText"></p>
+  <button type="button" onclick="getPlayerDuration()">Get Video Duration</button>
+  <script>
+    function getPlayerDuration() {
+      document.getElementById("durationText").innerHTML = "This video is " + vidplayer.getDuration() + " seconds long."
+    }
+  </script>
+  <br><br>
+
+  Width: <input type="text" name="dimensionBox">px <button type="button" onclick="getPlayerWidth()">Get Current Width</button>
+  <br><br>
+  Height: <input type="text" name="dimensionBox">px <button type="button" onclick="getPlayerHeight()">Get Current Height</button>
+  <br><br>
+  <button type="button" onclick="resizePlayer();">Set Dimensions</button>
+  <script>
+    getPlayerWidth();
+    getPlayerHeight();
+
+    function getPlayerWidth() {
+      document.getElementsByName("dimensionBox")[0].value = vidplayer.getWidth();
+    }
+    function getPlayerHeight() {
+      document.getElementsByName("dimensionBox")[1].value = vidplayer.getHeight();
+    }
+    function resizePlayer() {
+      let newDimensions = document.getElementsByName("dimensionBox");
+      vidplayer.resize(newDimensions[0].value, newDimensions[1].value);
+    }
+  </script>
+  <br><br>
+
+  Volume: <input type="text" name="volumeBox">% <button type="button" onclick="getPlayerVolume()">Get Current Volume</button>
+  NOTE: If the player is muted, this will reflect the volume that it will return to when unmuted.
+  <br><br>
+  <button type="button" onclick="setPlayerVolume()">Set Volume</button>
+  <script>
+    getPlayerVolume();
+
+    function getPlayerVolume() {
+      document.getElementsByName("volumeBox")[0].value = vidplayer.getVolume();
+    }
+    function setPlayerVolume() {
+      let newVolume = document.getElementsByName("volumeBox")[0].value;
+      vidplayer.setVolume(newVolume);
+    }
+  </script>
+  <br><br>
+
+  <p id=playbackStateText></p>
+  <button type="button" onclick="getPlayerState()">Get Playback State</button>
+  <script>
+    function getPlayerState() {
+      document.getElementById("playbackStateText").innerHTML = "The player is currently " + vidplayer.getPlaybackState() + "."
+    }
+  </script>
+
+</html>
